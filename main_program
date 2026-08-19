@@ -9,38 +9,42 @@ long duration;
 int distance;
 
 void setup() {
- pinMode(trigPin, OUTPUT);
- pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 
- door.attach(6);
- door.write(0);
+  door.attach(6);
+  door.write(0);      // Door starts closed
 
- Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
 
- digitalWrite(trigPin, LOW);
- delayMicroseconds(2);
+  // Send ultrasonic pulse
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
 
- digitalWrite(trigPin, HIGH);
- delayMicroseconds(10);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
 
- digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, LOW);
 
- duration = pulseIn(echoPin, HIGH);
+  // Receive echo
+  duration = pulseIn(echoPin, HIGH);
 
- distance = duration * 0.034 / 2;
+  // Calculate distance
+  distance = duration * 0.034 / 2;
 
- Serial.print("Distance: ");
- Serial.println(distance);
+  Serial.print("Distance: ");
+  Serial.println(distance);
 
- if (distance <= 100) {
-   door.write(90);
- }
- else {
-   door.write(0);
- }
+  // Open door if object is within 100 cm
+  if (distance <= 100) {
+    door.write(90);      // Open door
+  }
+  else {
+    door.write(0);       // Close door
+  }
 
- delay(200);
+  delay(200);
 }
